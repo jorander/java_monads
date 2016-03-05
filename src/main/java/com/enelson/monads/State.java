@@ -5,7 +5,10 @@ import javaslang.Tuple2;
 import java.util.function.Function;
 
 /**
- * Created by enelson on 3/4/16.
+ * State monad allows state and value to be chained
+ *
+ * @author Eric Nelson
+ * @since 1.0
  */
 public class State<S, A> {
 

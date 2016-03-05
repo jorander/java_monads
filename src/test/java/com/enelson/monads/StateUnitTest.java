@@ -1,6 +1,8 @@
 package com.enelson.monads;
 
 import javaslang.Tuple2;
+import javaslang.collection.HashMap;
+import javaslang.collection.Map;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.*;
@@ -71,16 +73,43 @@ public class StateUnitTest {
 
     @Test
     public void testFlatMap() {
-        State<String, Integer> state1 = State.of(s -> new Tuple2<>(s, Integer.parseInt(s)));
+        State<String, Integer> state1 = State.of(s -> new Tuple2<>(s, Integer.parseInt(s)+1));
         State<String, String> r = state1.flatMap(this::convert);
+        System.out.println("--> _1: "+r.apply("2")._1);
+        System.out.println("--> _2: "+r.apply("2")._2);
 
         assertThat(state1).isNotNull();
         assertThat(r).isNotNull();
-        assertThat(r.apply("2")._2).isEqualTo("2");
+        assertThat(r.apply("2")._2).isEqualTo("3");
+    }
+
+    @Test
+    public void testStory() {
+        State<Map<String, Integer>, Integer> r = countWords("this is one two three");
+
+        State<Map<String, Integer>, Integer> state = countWords("This is the first sentence")
+                                                         .flatMap(s -> countWords("This is the second sentence"))
+                                                         .flatMap(s -> countWords("This is the third sentence"));
+
+        Tuple2<Map<String, Integer>, Integer> result = state.apply(HashMap.empty());
+        System.out.println(result._1);
+        System.out.println(result._2);
     }
 
     private State<String, String> convert(Integer i) {
-        return State.of((String s) -> new Tuple2<>(s, i+""));
+        return State.of(s -> new Tuple2<>(s, i+""));
+    }
+
+    private State<Map<String, Integer>, Integer> countWords(String sentence) {
+        return State.modify(map -> {
+            System.out.println("--> In: "+map );
+            for( String word : sentence.trim().split(" ") ) {
+                Integer currCount = map.get(word).getOrElse(0);
+                map = map.put(word, currCount+1);
+            }
+            System.out.println("--> Out: "+map );
+            return map;
+        });
     }
 
 }
