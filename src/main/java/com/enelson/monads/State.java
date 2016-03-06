@@ -22,6 +22,10 @@ public class State<S, A> {
         return new State<>(f);
     }
 
+    public static <S, A> State<S, A> pure(A a) {
+        return new State<>(s -> new Tuple2<>(s, a));
+    }
+
     public static <S> State<S, S> get() {
         return new State<>(s -> new Tuple2<>(s, s));
     }
@@ -45,14 +49,14 @@ public class State<S, A> {
     public <B> State<S, B> map(Function<? super A, ? extends B> f) {
         return new State<>(s -> {
             Tuple2<S, A> value = runner.apply(s);
-            return new Tuple2<>(s, f.apply(value._2));
+            return new Tuple2<>(value._1, f.apply(value._2));
         });
     }
 
     public <B> State<S, B> flatMap(Function<A, State<S, B>> f) {
         return new State<>(s -> {
             Tuple2<S, A> value = runner.apply(s);
-            return f.apply(value._2).apply(s);
+            return f.apply(value._2).apply(value._1);
         });
     }
 

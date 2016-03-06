@@ -6,6 +6,7 @@ import javaslang.collection.Map;
 import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.*;
+import static com.enelson.monads.State.*;
 
 public class StateUnitTest {
 
@@ -75,8 +76,6 @@ public class StateUnitTest {
     public void testFlatMap() {
         State<String, Integer> state1 = State.of(s -> new Tuple2<>(s, Integer.parseInt(s)+1));
         State<String, String> r = state1.flatMap(this::convert);
-        System.out.println("--> _1: "+r.apply("2")._1);
-        System.out.println("--> _2: "+r.apply("2")._2);
 
         assertThat(state1).isNotNull();
         assertThat(r).isNotNull();
@@ -84,16 +83,31 @@ public class StateUnitTest {
     }
 
     @Test
-    public void testStory() {
-        State<Map<String, Integer>, Integer> r = countWords("this is one two three");
+    public void testChainedFunctions() {
+        Tuple2<String, Integer> r = State.<String>get()
+                                         .flatMap(s -> put(s+"!"))
+                                         .flatMap(s -> get())
+                                         .map(String::length)
+                                         .apply("Hello");
 
+        assertThat(r).isNotNull();
+        assertThat(r._1).isEqualTo("Hello!");
+        assertThat(r._2).isEqualTo(6);
+    }
+
+    @Test
+    public void testStory() {
         State<Map<String, Integer>, Integer> state = countWords("This is the first sentence")
                                                          .flatMap(s -> countWords("This is the second sentence"))
                                                          .flatMap(s -> countWords("This is the third sentence"));
 
         Tuple2<Map<String, Integer>, Integer> result = state.apply(HashMap.empty());
-        System.out.println(result._1);
-        System.out.println(result._2);
+
+        assertThat(result).isNotNull();
+        assertThat(result._2).isNull();
+        assertThat(result._1.length()).isEqualTo(7);
+        assertThat(result._1.get("the").get()).isEqualTo(3);
+        assertThat(result._1.get("first").get()).isEqualTo(1);
     }
 
     private State<String, String> convert(Integer i) {

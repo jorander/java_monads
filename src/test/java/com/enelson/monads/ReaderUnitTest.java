@@ -1,5 +1,6 @@
 package com.enelson.monads;
 
+import javaslang.Tuple2;
 import javaslang.collection.List;
 import javaslang.collection.Seq;
 import org.junit.Test;
@@ -24,6 +25,18 @@ public class ReaderUnitTest {
 
         Integer i = reader.apply("3");
         assertThat(i).isEqualTo(2);
+    }
+
+    @Test
+    public void testReaderZip() {
+        Reader<String, Integer> reader1 = Reader.pure(2);
+        Reader<String, String> reader2  = Reader.pure("3");
+        Reader<String, Tuple2<Integer, String>> reader3 = reader1.zip(reader2);
+        Tuple2<Integer, String> result = reader3.apply("test");
+
+        assertThat(result).isNotNull();
+        assertThat(result._1).isEqualTo(2);
+        assertThat(result._2).isEqualTo("3");
     }
 
 //    @Test

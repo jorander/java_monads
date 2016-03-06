@@ -26,11 +26,11 @@ public class Reader<CTX, T> {
     }
 
     public static <CTX, T> Reader<CTX, T> pure(T t) {
-        return new Reader<>((CTX ctx) -> t);
+        return new Reader<>(ctx -> t);
     }
 
     public static <CTX, T> Reader<CTX, ? extends Seq<T>> sequence(Seq<Reader<CTX, T>> readers) {
-        return new Reader<>((CTX ctx) -> {
+        return new Reader<>(ctx -> {
             List<T> list = List.empty();
             for(Reader<CTX, T> r : readers) {
                 list = list.append(r.apply(ctx));
@@ -44,11 +44,11 @@ public class Reader<CTX, T> {
     }
 
     public <U> Reader<CTX, U> map(Function<? super T, ? extends U> f) {
-        return new Reader<>((CTX ctx) -> f.apply(apply(ctx)));
+        return new Reader<>(ctx -> f.apply(apply(ctx)));
     }
 
     public <U> Reader<CTX, U> flatMap(Function<? super T, Reader<CTX, ? extends U>> f) {
-        return new Reader<>((CTX ctx) -> f.apply(apply(ctx)).apply(ctx));
+        return new Reader<>(ctx -> f.apply(apply(ctx)).apply(ctx));
     }
 
     public <U> Reader<CTX, Tuple2<T, U>> zip(Reader<CTX, U> reader) {
