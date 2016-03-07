@@ -60,9 +60,4 @@ public class State<S, A> {
         });
     }
 
-    @Override
-    public String toString() {
-        return "State";
-    }
-
 }

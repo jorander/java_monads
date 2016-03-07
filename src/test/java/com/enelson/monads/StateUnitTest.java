@@ -18,6 +18,15 @@ public class StateUnitTest {
     }
 
     @Test
+    public void testStaticPure() {
+        State<String, Integer> state = State.pure(2);
+
+        assertThat(state).isNotNull();
+        assertThat(state.apply("2")._1).isEqualTo("2");
+        assertThat(state.apply("2")._2).isEqualTo(2);
+    }
+
+    @Test
     public void testStaticGet() {
         State<String, String> state = State.get();
         Tuple2<String, String> r = state.apply("test");
