@@ -29,7 +29,7 @@ public class Reader<CTX, T> {
         return new Reader<>(ctx -> t);
     }
 
-    public static <CTX, T> Reader<CTX, ? extends Seq<T>> sequence(Seq<Reader<CTX, T>> readers) {
+    public static <CTX, T> Reader<CTX, List<T>> sequence(Iterable<Reader<CTX, T>> readers) {
         return new Reader<>(ctx -> {
             List<T> list = List.empty();
             for(Reader<CTX, T> r : readers) {

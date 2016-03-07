@@ -39,14 +39,17 @@ public class ReaderUnitTest {
         assertThat(result._2).isEqualTo("3");
     }
 
-//    @Test
-//    public void testStaticSequence() {
-//        Reader<String, Integer> reader1 = Reader.of(s -> 1);
-//        Reader<String, Integer> reader2 = Reader.of(s -> 2);
-//        Reader<String, Integer> reader3 = Reader.of(s -> 3);
-//
-//        Seq<Reader<String, Integer>> r = List.of(reader1, reader2, reader3);
-//        Reader<String, List<Integer>> readerComposed = Reader.<String, Integer>sequence(r);
-//    }
+    @Test
+    public void testStaticSequence() {
+        Reader<String, Integer> reader1 = Reader.of(s -> 1);
+        Reader<String, Integer> reader2 = Reader.of(s -> 2);
+        Reader<String, Integer> reader3 = Reader.of(s -> 3);
+
+        Reader<String, List<Integer>> reader4 = Reader.sequence(List.of(reader1, reader2, reader3));
+        List<Integer> result = reader4.apply("test");
+
+        assertThat(result).isNotNull();
+        assertThat(result.length()).isEqualTo(3);
+    }
 
 }
