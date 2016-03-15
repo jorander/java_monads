@@ -5,9 +5,9 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.enelson.monads</groupId>
+    <groupId>com.github.enelson</groupId>
     <artifactId>monads</artifactId>
-    <version>0.1-SNAPSHOT</version>
+    <version>0.1</version>
 
     <description>Library of common functional monads for Java</description>
 
