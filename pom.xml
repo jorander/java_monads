@@ -7,9 +7,12 @@
 
     <groupId>com.github.enelson</groupId>
     <artifactId>monads</artifactId>
-    <version>0.1</version>
+    <version>0.2-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
+    <name>Java Monads</name>
     <description>Library of common functional monads for Java</description>
+    <url>https://github.com/enelson/java_monads</url>
 
     <licenses>
         <license>
