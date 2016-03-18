@@ -2,7 +2,6 @@ package com.enelson.monads;
 
 import javaslang.Tuple2;
 import javaslang.collection.List;
-import javaslang.collection.Seq;
 
 import java.util.function.Function;
 
@@ -13,45 +12,45 @@ import java.util.function.Function;
  * @author Eric Nelson
  * @since 1.0
  */
-public class Reader<CTX, T> {
+public class Reader<CTX, A> {
 
-    private Function<CTX, T> runner;
+    private Function<CTX, A> runner;
 
-    private Reader(Function<CTX, T> runner) {
+    private Reader(Function<CTX, A> runner) {
         this.runner = runner;
     }
 
-    public static <CTX, T> Reader<CTX, T> of(Function<CTX, T> f) {
+    public static <CTX, A> Reader<CTX, A> of(Function<CTX, A> f) {
         return new Reader<>(f);
     }
 
-    public static <CTX, T> Reader<CTX, T> pure(T t) {
-        return new Reader<>(ctx -> t);
+    public static <CTX, A> Reader<CTX, A> pure(A a) {
+        return new Reader<>(ctx -> a);
     }
 
-    public static <CTX, T> Reader<CTX, List<T>> sequence(Iterable<Reader<CTX, T>> readers) {
+    public static <CTX, A> Reader<CTX, List<A>> sequence(Iterable<Reader<CTX, A>> readers) {
         return new Reader<>(ctx -> {
-            List<T> list = List.empty();
-            for(Reader<CTX, T> r : readers) {
+            List<A> list = List.empty();
+            for(Reader<CTX, A> r : readers) {
                 list = list.append(r.apply(ctx));
             }
             return list;
         });
     }
 
-    public T apply(CTX ctx) {
+    public A apply(CTX ctx) {
         return runner.apply(ctx);
     }
 
-    public <U> Reader<CTX, U> map(Function<? super T, ? extends U> f) {
+    public <U> Reader<CTX, U> map(Function<? super A, ? extends U> f) {
         return new Reader<>(ctx -> f.apply(apply(ctx)));
     }
 
-    public <U> Reader<CTX, U> flatMap(Function<? super T, Reader<CTX, ? extends U>> f) {
+    public <U> Reader<CTX, U> flatMap(Function<? super A, Reader<CTX, ? extends U>> f) {
         return new Reader<>(ctx -> f.apply(apply(ctx)).apply(ctx));
     }
 
-    public <U> Reader<CTX, Tuple2<T, U>> zip(Reader<CTX, U> reader) {
+    public <U> Reader<CTX, Tuple2<A, U>> zip(Reader<CTX, U> reader) {
         return this.flatMap(a -> reader.map(b -> new Tuple2<>(a, b)));
     }
 
