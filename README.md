@@ -3,7 +3,7 @@
 
 # Common Monads for Java
 
-[![Monad](http://adit.io/imgs/functors/bind_def.png)]
+[![Monad](http://adit.io/imgs/functors/bind_def.png)](http://adit.io/posts/2013-06-10-three-useful-monads.html)
 
 There is a great article [here](http://adit.io/posts/2013-06-10-three-useful-monads.html) that talks about 3 very common and useful monads: `Reader`, `Writer` and `State`. 
 
