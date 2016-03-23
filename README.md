@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/enelson/java_monads.svg?branch=master)](https://travis-ci.org/enelson/java_monads)
+![tag](http://img.shields.io/github/tag/enelson/java_monads.svg)
 [![Coverage Status](https://codecov.io/github/enelson/java_monads/coverage.png?branch=master)](https://codecov.io/github/enelson/java_monads?branch=master)
+[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.github.enelson/monads/badge.svg)](http://www.javadoc.io/doc/com.github.enelson/monads)
 
 # Common Monads for Java
 
