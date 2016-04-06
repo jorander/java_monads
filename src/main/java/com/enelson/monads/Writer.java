@@ -1,7 +1,7 @@
 package com.enelson.monads;
 
+import com.enelson.monads.algebra.Monoid;
 import javaslang.Tuple2;
-import javaslang.collection.List;
 
 import java.util.function.Function;
 
@@ -11,34 +11,34 @@ import java.util.function.Function;
  * @author Eric Nelson
  * @since 1.0
  */
-public class Writer<A> {
+public class Writer<W extends Monoid, A> {
 
-    private List<String> logs;
+    private W logs;
     private A value;
 
-    private Writer(List<String> logs, A value) {
+    private Writer(W logs, A value) {
         this.logs = logs;
         this.value = value;
     }
 
-    public static <A> Writer<A> of(String log, A value) {
-        return new Writer<>(List.of(log), value);
+    public static <W extends Monoid, A> Writer<W, A> of(W log, A value) {
+        return new Writer<>(log, value);
     }
 
-    public <B> Writer<B> map(Function<A, B> f) {
+    public <B> Writer<W, B> map(Function<A, B> f) {
         return new Writer<>(logs, f.apply(value));
     }
 
-    public <B> Writer<B> flatMap(Function<A, Writer<B>> f) {
-        Writer<B> mappedWriter = f.apply(value);
-        return new Writer<>(logs.appendAll(mappedWriter.logs), mappedWriter.value);
+    public <B> Writer<W, B> flatMap(Function<A, Writer<W, B>> f) {
+        Writer<W, B> mappedWriter = f.apply(value);
+        return new Writer<>((W) logs.append(mappedWriter.logs), mappedWriter.value);
     }
 
-    public Tuple2<List<String>, A> getContext() {
+    public Tuple2<W, A> getContext() {
         return new Tuple2<>(logs, value);
     }
 
-    public List<String> getLogs() {
+    public W getLogs() {
         return logs;
     }
 
@@ -48,7 +48,8 @@ public class Writer<A> {
 
     @Override
     public String toString() {
-        String logsString = logs.mkString(", ");
-        return "Writer("+logsString+", "+value+")";
+//        String logsString = logs.mkString(", ");
+        return "Writer("+logs+", "+value+")";
     }
+
 }
