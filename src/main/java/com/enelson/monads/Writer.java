@@ -48,7 +48,6 @@ public class Writer<W extends Monoid, A> {
 
     @Override
     public String toString() {
-//        String logsString = logs.mkString(", ");
         return "Writer("+logs+", "+value+")";
     }
 
