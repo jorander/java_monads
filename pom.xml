@@ -7,7 +7,7 @@
 
     <groupId>com.github.enelson</groupId>
     <artifactId>monads</artifactId>
-    <version>0.3-SNAPSHOT</version>
+    <version>0.3</version>
     <packaging>jar</packaging>
 
     <name>Java Monads</name>
